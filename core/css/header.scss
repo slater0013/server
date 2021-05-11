@@ -487,6 +487,24 @@ nav[role='navigation'] {
 			height: 20px;
 		}
 
+		.unread-counter {
+			background-color: var(--color-primary-text);
+			border-radius: 50%;
+			width: 6px;
+			height: 6px;
+			display: block;
+			z-index: 999;
+			position: absolute;
+			bottom: 5px;
+			right: calc(50% - 3px);
+			text-indent: -9999px;
+			transition: all var(--animation-quick) ease;
+			&.hidden {
+				display: none;
+			}
+		}
+
+
 		/* App title */
 		span {
 			opacity: 0;
@@ -544,6 +562,10 @@ nav[role='navigation'] {
 			a::before {
 				border-width: 5px;
 			}
+
+			.unread-counter {
+				top: -10px;
+			}
 		}
 	}
 
@@ -587,6 +609,12 @@ nav[role='navigation'] {
 		display: none;
 	}
 
+	li a.active {
+		.unread-counter {
+			top: -10px;
+		}
+	}
+
 	/* triangle focus feedback */
 	li a.active::before,
 	li:hover a::before,
@@ -609,6 +637,25 @@ nav[role='navigation'] {
 
 	#more-apps {
 		z-index: 3;
+	}
+}
+
+#apps {
+	.unread-counter {
+		background-color: var(--color-primary-element);
+		border-radius: 50%;
+		width: 6px;
+		height: 6px;
+		display: block;
+		z-index: 999;
+		position: absolute;
+		bottom: 7px;
+		left: 17px;
+		text-indent: -9999px;
+		transition: all var(--animation-quick) ease;
+		&.hidden {
+			display: none;
+		}
 	}
 }
 
