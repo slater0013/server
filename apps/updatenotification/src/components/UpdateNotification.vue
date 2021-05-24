@@ -194,7 +194,7 @@ export default {
 			}
 
 			if (this.appStoreFailed) {
-				return t('updatenotification', 'Could not connect to the App Store or returned no updates at all. Search manually for updates or make sure your server has access to the internet and can connect to the App Store.')
+				return t('updatenotification', 'Could not connect to the App Store or no updates have been returned at all. Search manually for updates or make sure your server has access to the internet and can connect to the App Store.')
 			}
 
 			return this.missingAppUpdates.length === 0
