@@ -411,7 +411,7 @@
 			if (options.scrollTo) {
 				// Trigger default action for the item targeted by scrollTo.
 				const fileInfo = JSON.parse(atob($('#initial-state-files-fileInfo').val()))
-				var spec = this.fileActions.getDefaultFileAction(fileInfo.mimetype, 'file', fileInfo.permissions)
+				var spec = this.fileActions.getDefaultFileAction(fileInfo.mime, fileInfo.type, fileInfo.permissions)
 				if (spec && spec.action) {
 					spec.action(fileInfo.name, {
 						// $file: $tr,
@@ -421,7 +421,7 @@
 					});
 				}
 				// Open de sidebar.
-				OCA.Files.Sidebar.open(fileInfo.path)
+				this.showDetailsView(fileInfo.path);
 
 				this.$fileList.one('updated', function() {
 					self.scrollTo(options.scrollTo);

@@ -337,10 +337,22 @@ class ViewController extends Controller {
 
 		if ($scrollto !== null) {
 			$uid = $this->userSession->getUser()->getUID();
-			$root = $this->rootFolder->getUserFolder($uid);
-			$path = $root->getFullPath($dir.'/'.$scrollto);
+			$userFolder = $this->rootFolder->getUserFolder($uid);
+			$node = $userFolder->get($dir)->get($scrollto);
+
+			// properly format full path and make sure
+			// we're relative to the user home folder
+			$isRoot = $node === $userFolder;
+			$path = $userFolder->getRelativePath($node->getPath());
+
 			$this->initialState->provideInitialState(
-				'fileInfo', $this->fileView->getFileInfo($path)->getData()->getData()
+				'fileInfo', [
+					'name' => $isRoot ? '' : $node->getName(),
+					'path' => $path,
+					'mime' => $node->getMimetype(),
+					'type' => $node->getType(),
+					'permissions' => $node->getPermissions(),
+				]
 			);
 		}
 
