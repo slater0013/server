@@ -7,7 +7,7 @@ namespace Composer\Autoload;
 class ComposerStaticInit53792487c5a8370acc0b06b1a864ff4c
 {
     public static $prefixLengthsPsr4 = array (
-        'O' =>
+        'O' => 
         array (
             'OC\\Core\\' => 8,
             'OC\\' => 3,
@@ -16,15 +16,15 @@ class ComposerStaticInit53792487c5a8370acc0b06b1a864ff4c
     );
 
     public static $prefixDirsPsr4 = array (
-        'OC\\Core\\' =>
+        'OC\\Core\\' => 
         array (
             0 => __DIR__ . '/../../..' . '/core',
         ),
-        'OC\\' =>
+        'OC\\' => 
         array (
             0 => __DIR__ . '/../../..' . '/lib/private',
         ),
-        'OCP\\' =>
+        'OCP\\' => 
         array (
             0 => __DIR__ . '/../../..' . '/lib/public',
         ),
@@ -1086,6 +1086,7 @@ class ComposerStaticInit53792487c5a8370acc0b06b1a864ff4c
         'OC\\Files\\Cache\\Propagator' => __DIR__ . '/../../..' . '/lib/private/Files/Cache/Propagator.php',
         'OC\\Files\\Cache\\QuerySearchHelper' => __DIR__ . '/../../..' . '/lib/private/Files/Cache/QuerySearchHelper.php',
         'OC\\Files\\Cache\\Scanner' => __DIR__ . '/../../..' . '/lib/private/Files/Cache/Scanner.php',
+        'OC\\Files\\Cache\\SearchBuilder' => __DIR__ . '/../../..' . '/lib/private/Files/Cache/SearchBuilder.php',
         'OC\\Files\\Cache\\Storage' => __DIR__ . '/../../..' . '/lib/private/Files/Cache/Storage.php',
         'OC\\Files\\Cache\\StorageGlobal' => __DIR__ . '/../../..' . '/lib/private/Files/Cache/StorageGlobal.php',
         'OC\\Files\\Cache\\Updater' => __DIR__ . '/../../..' . '/lib/private/Files/Cache/Updater.php',
