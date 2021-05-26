@@ -421,7 +421,7 @@
 					});
 				}
 				// Open de sidebar.
-				this.showDetailsView(fileInfo.path);
+				OCA.Files.Sidebar.open(fileInfo.path);
 
 				this.$fileList.one('updated', function() {
 					self.scrollTo(options.scrollTo);
@@ -3212,11 +3212,6 @@
 		scrollTo:function(file) {
 			if (!_.isArray(file)) {
 				file = [file];
-			}
-			if (file.length === 1) {
-				_.defer(function() {
-					this.showDetailsView(file[0]);
-				}.bind(this));
 			}
 			this.highlightFiles(file, function($tr) {
 				$tr.addClass('searchresult');
