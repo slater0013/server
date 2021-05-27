@@ -416,29 +416,33 @@
 
 			if(options.openFile) {
 				// Trigger default action if openFile is set.
-				const fileInfo = JSON.parse(atob($('#initial-state-files-openFileInfo').val()))
-				var spec = this.fileActions.getDefaultFileAction(fileInfo.mime, fileInfo.type, fileInfo.permissions)
-				if (spec && spec.action) {
-					spec.action(fileInfo.name, {
-						// $file: $tr,
-						fileList: this,
-						fileActions: this.fileActions,
-						dir: fileInfo.directory
-					});
-				}
-				else {
-					var url = this.getDownloadUrl(fileInfo.name, fileInfo.dir, true);
-					OCA.Files.Files.handleDownload(url);
-				}
-				// Open de sidebar.
-				OCA.Files.Sidebar.open(fileInfo.path);
+				try {
+					const fileInfo = JSON.parse(atob($('#initial-state-files-openFileInfo').val()))
+					var spec = this.fileActions.getDefaultFileAction(fileInfo.mime, fileInfo.type, fileInfo.permissions)
+					if (spec && spec.action) {
+						spec.action(fileInfo.name, {
+							// $file: $tr,
+							fileList: this,
+							fileActions: this.fileActions,
+							dir: fileInfo.directory
+						});
+					}
+					else {
+						var url = this.getDownloadUrl(fileInfo.name, fileInfo.dir, true);
+						OCA.Files.Files.handleDownload(url);
+					}
+					// Open de sidebar.
+					OCA.Files.Sidebar.open(fileInfo.path);
 
-				// Select the file after loading is done.
-				this.$fileList.one('updated', () => {
-					var $tr = this.$fileList.children().filterAttr('data-id', '' + options.openFile);
-					var filename = $tr.attr('data-file');
-					this.fileActions.currentFile = $tr.find('td');
-				});
+					// Select the file after loading is done.
+					this.$fileList.one('updated', () => {
+						var $tr = this.$fileList.children().filterAttr('data-id', '' + options.openFile);
+						var filename = $tr.attr('data-file');
+						this.fileActions.currentFile = $tr.find('td');
+					});
+				} catch (error) {
+					console.error(`Failed to open the file for URL: ${location.href}`, error)
+				}
 			}
 
 			this._operationProgressBar = new OCA.Files.OperationProgressBar();

@@ -344,17 +344,21 @@ class ViewController extends Controller {
 			// we're relative to the user home folder
 			$isRoot = $node === $userFolder;
 			$path = $userFolder->getRelativePath($node->getPath());
-
-			$this->initialState->provideInitialState(
-				'openFileInfo', [
-					'name' => $isRoot ? '' : $node->getName(),
-					'path' => $path,
-					'directory' => $userFolder->getRelativePath($node->getParent()->getPath()),
-					'mime' => $node->getMimetype(),
-					'type' => $node->getType(),
-					'permissions' => $node->getPermissions(),
-				]
-			);
+			$directory = $userFolder->getRelativePath($node->getParent()->getPath());
+			
+			// Prevent opening a file from another folder.
+			if ($dir === $directory) {
+				$this->initialState->provideInitialState(
+					'openFileInfo', [
+						'name' => $isRoot ? '' : $node->getName(),
+						'path' => $path,
+						'directory' => $directory,
+						'mime' => $node->getMimetype(),
+						'type' => $node->getType(),
+						'permissions' => $node->getPermissions(),
+					]
+				);
+			}
 		}
 
 		return $response;
