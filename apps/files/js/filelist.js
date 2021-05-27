@@ -409,22 +409,35 @@
 			this.$container.on('scroll', _.bind(this._onScroll, this));
 
 			if (options.scrollTo) {
-				// Trigger default action for the item targeted by scrollTo.
-				const fileInfo = JSON.parse(atob($('#initial-state-files-fileInfo').val()))
+				this.$fileList.one('updated', function() {
+					self.scrollTo(options.scrollTo);
+				});
+			}
+
+			if(options.openFile) {
+				// Trigger default action if openFile is set.
+				const fileInfo = JSON.parse(atob($('#initial-state-files-openFileInfo').val()))
 				var spec = this.fileActions.getDefaultFileAction(fileInfo.mime, fileInfo.type, fileInfo.permissions)
 				if (spec && spec.action) {
 					spec.action(fileInfo.name, {
 						// $file: $tr,
 						fileList: this,
 						fileActions: this.fileActions,
-						dir: this.getCurrentDirectory()
+						dir: fileInfo.directory
 					});
+				}
+				else {
+					var url = this.getDownloadUrl(fileInfo.name, fileInfo.dir, true);
+					OCA.Files.Files.handleDownload(url);
 				}
 				// Open de sidebar.
 				OCA.Files.Sidebar.open(fileInfo.path);
 
-				this.$fileList.one('updated', function() {
-					self.scrollTo(options.scrollTo);
+				// Select the file after loading is done.
+				this.$fileList.one('updated', () => {
+					var $tr = this.$fileList.children().filterAttr('data-id', '' + options.openFile);
+					var filename = $tr.attr('data-file');
+					this.fileActions.currentFile = $tr.find('td');
 				});
 			}
 
@@ -1332,31 +1345,6 @@
 						newTrs[i].removeClass('transparent');
 					}
 				}, 0);
-			}
-
-			if(!this.triedActionOnce) {
-				var id = OC.Util.History.parseUrlQuery().openfile;
-				if (id) {
-					var $tr = this.$fileList.children().filterAttr('data-id', '' + id);
-					var filename = $tr.attr('data-file');
-					this.fileActions.currentFile = $tr.find('td');
-					var dir = $tr.attr('data-path') || this.getCurrentDirectory();
-					var spec = this.fileActions.getCurrentDefaultFileAction();
-					if (spec && spec.action) {
-						spec.action(filename, {
-							$file: $tr,
-							fileList: this,
-							fileActions: this.fileActions,
-							dir: dir
-						});
-
-					}
-					else {
-						var url = this.getDownloadUrl(filename, dir, true);
-						OCA.Files.Files.handleDownload(url);
-					}
-				}
-				this.triedActionOnce = true;
 			}
 
 			return newTrs;
@@ -3212,6 +3200,11 @@
 		scrollTo:function(file) {
 			if (!_.isArray(file)) {
 				file = [file];
+			}
+			if (file.length === 1) {
+				_.defer(function() {
+					this.showDetailsView(file[0]);
+				}.bind(this));
 			}
 			this.highlightFiles(file, function($tr) {
 				$tr.addClass('searchresult');

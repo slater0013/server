@@ -186,7 +186,7 @@ class ViewController extends Controller {
 	 * @return TemplateResponse|RedirectResponse
 	 * @throws NotFoundException
 	 */
-	public function index($dir = '', $view = '', $fileid = null, $fileNotFound = false, $scrollto = null) {
+	public function index($dir = '', $view = '', $fileid = null, $fileNotFound = false, $openfile = null) {
 		if ($fileid !== null) {
 			try {
 				return $this->redirectToFile($fileid);
@@ -335,10 +335,10 @@ class ViewController extends Controller {
 		$policy->addAllowedFrameDomain('\'self\'');
 		$response->setContentSecurityPolicy($policy);
 
-		if ($scrollto !== null) {
+		if ($openfile !== null) {
 			$uid = $this->userSession->getUser()->getUID();
 			$userFolder = $this->rootFolder->getUserFolder($uid);
-			$node = $userFolder->get($dir)->get($scrollto);
+			$node = $userFolder->getById($openfile)[0];
 
 			// properly format full path and make sure
 			// we're relative to the user home folder
@@ -346,9 +346,10 @@ class ViewController extends Controller {
 			$path = $userFolder->getRelativePath($node->getPath());
 
 			$this->initialState->provideInitialState(
-				'fileInfo', [
+				'openFileInfo', [
 					'name' => $isRoot ? '' : $node->getName(),
 					'path' => $path,
+					'directory' => $userFolder->getRelativePath($node->getParent()->getPath()),
 					'mime' => $node->getMimetype(),
 					'type' => $node->getType(),
 					'permissions' => $node->getPermissions(),
